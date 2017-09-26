@@ -7,8 +7,8 @@ public:
 	point();
 	T const& x() const;
 	T const& y() const;
-	void move_to(T x, T y);	/// mova o ponto para as coordenadas (x, y)
-	void move_by(T x, T y);	/// adicione (x, y) à posição atual do ponto
+	void move_to(T, T);	/// mova o ponto para as coordenadas (x, y)
+	void move_by(T, T);	/// adicione (x, y) à posição atual do ponto
 
 private:
 	T x_;
@@ -37,6 +37,18 @@ T const& point<T>::y()
 const
 {
 	return y_;
+}
+
+template<class T>
+void point<T>::move_to(T x, T, y) {
+	x_ = x;
+	y_ = y;
+}
+
+template<class T>
+void point<T>::move_by(T x, T y) {
+	x_+=x;
+	y_+=y;
 }
 
 int main() {}
