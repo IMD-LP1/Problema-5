@@ -47,8 +47,8 @@ void point<T>::move_to(T x, T, y) {
 
 template<class T>
 void point<T>::move_by(T x, T y) {
-	x_+=x;
-	y_+=y;
+	x_ += x;
+	y_ += y;	
 }
 
 int main() {}
