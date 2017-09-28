@@ -19,11 +19,11 @@ public:
 
 	void ler();
 	void imprimir();
-	bool pertinencia(int);
+	bool belongs(int);
 	void diferenca(Conjunto, Conjunto, Conjunto);
 	void uniao(Conjunto, Conjunto);
 	void intersecao();
-
+	int get_current_size();
 	
 
 private:
@@ -53,7 +53,7 @@ void Conjunto<T>::ler() {
 	for(int i{0}; i < tam_; i++) {
 		cout << "Element " << i + 1 << ": ";
 		cin >> elementos_[i];
-		if(pertinencia(i)) {
+		if(belongs(i)) {
 			i--;
 		}
 	}
@@ -81,7 +81,7 @@ bool Conjunto<T>::belongs(int t) {
 
 template <typename T>
 void Conjunto<T>::diferenca(Conjunto b) {
-	Conjunto <T> c {get_current_size()}
+	Conjunto<T> C{get_current_size()}
 
 	for(int i{0}; i < get_current_size()_; i++) {
 		if(not b.belongs(elementos_[i])) 
@@ -108,6 +108,11 @@ void Conjunto<T>::intersecao() {
 	}
 }
 
+template <typename T>
+int Conjunto<T>::get_current_size() {
+	return tam_;
+}
+
 int main() {
 
 	int a, b, c;
@@ -129,7 +134,7 @@ int main() {
 	B.imprimir();
 	cout << " }" << endl;
 	
-	Conjunto <int> c = a.diferenca(b);
+	Conjunto <int> C = a.diferenca(b);
 
 	cout << "Diferenca: ";
 	//C.diferenca(a, b);
