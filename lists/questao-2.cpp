@@ -20,7 +20,7 @@ public:
 	void ler();
 	void imprimir();
 	bool belongs(int);
-	void diferenca(Conjunto, Conjunto, Conjunto);
+	Conjunto diferenca(Conjunto);
 	void uniao(Conjunto, Conjunto);
 	void intersecao();
 	int get_current_size();
@@ -80,14 +80,14 @@ bool Conjunto<T>::belongs(int t) {
 }
 
 template <typename T>
-void Conjunto<T>::diferenca(Conjunto b) {
-	Conjunto<T> C{get_current_size()}
+Conjunto Conjunto<T>::diferenca(Conjunto b) {
+	Conjunto<T> C{get_current_size()};
 
-	for(int i{0}; i < get_current_size()_; i++) {
+	for(int i{0}; i < get_current_size(); i++) {
 		if(not b.belongs(elementos_[i])) 
-		 	c.insert(elementos_[i]);
+		 	C.insert(elementos_[i]);
 	}	
-	return c;
+	return C;
 }
 
 template <typename T>
