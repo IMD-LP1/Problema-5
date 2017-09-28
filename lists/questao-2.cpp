@@ -19,9 +19,9 @@ public:
 
 	void ler();
 	void imprimir();
-	bool pertinencia();
-	void diferenca();
-	void uniao();
+	bool pertinencia(int);
+	void diferenca(Conjunto, Conjunto, Conjunto);
+	void uniao(Conjunto, Conjunto);
 	void intersecao();
 
 	
@@ -53,10 +53,9 @@ void Conjunto<T>::ler() {
 	for(int i{0}; i < tam_; i++) {
 		cout << "Element " << i + 1 << ": ";
 		cin >> elementos_[i];
-		for(int j{0}; j < i; i++) {
-			if()
+		if(pertinencia(i)) {
+			i--;
 		}
-		
 	}
 }
 
@@ -70,10 +69,48 @@ void Conjunto<T>::imprimir() {
 	}
 }
 
+template <typename T>
+bool Conjunto<T>::belongs(int t) {
+	for(int j{0}; j < t; j++) {
+		if(elementos_[j] == elementos_[t]) {
+			return true;
+		} 
+	}
+	return false;
+}
+
+template <typename T>
+void Conjunto<T>::diferenca(Conjunto b) {
+	Conjunto <T> c {get_current_size()}
+
+	for(int i{0}; i < get_current_size()_; i++) {
+		if(not b.belongs(elementos_[i])) 
+		 	c.insert(elementos_[i]);
+	}	
+	return c;
+}
+
+template <typename T>
+void Conjunto<T>::uniao(Conjunto a, Conjunto b) {
+
+	for(int i{0}; i < a.tam_; i++) {
+		for(int j{0}; j < b.tam_; j++) {
+
+		}
+	}
+
+}
+
+template <typename T>
+void Conjunto<T>::intersecao() {
+	for(int i{0}; i < tam_; i++) {
+
+	}
+}
 
 int main() {
 
-	int a, b;
+	int a, b, c;
 	
 	cout << "Cardinalidade de A: ";
 	cin >> a;
@@ -91,4 +128,11 @@ int main() {
 	cout << "B = { ";
 	B.imprimir();
 	cout << " }" << endl;
+	
+	Conjunto <int> c = a.diferenca(b);
+
+	cout << "Diferenca: ";
+	//C.diferenca(a, b);
+	C.imprimir();
+
 }
