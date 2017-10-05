@@ -1,211 +1,186 @@
-/** Questão 2 - Problema 5 */
 #include <iostream>
-#include <string>
-#include <vector>
+#include <iomanip>
+
 using namespace std;
 
-template<class T>
-class point
-{
+template <class T>
+class Conjunto{
 public:
-point(T const&);
-point();
-T tamanh();
+  Conjunto (int);
+  Conjunto();
+  ~Conjunto();
 
-void ler_elementos();
-void imprime_elementos();
-void alocar_elementos(T);
-void diferenca(point A, point B); 			//verificar
-bool verifica_vetor(int);
-T* elementos;								//verificar
+  void ler_conjunto(int); 
+  void escrever_conjunto();
+  bool belongs(int);
+  Conjunto<T> diferenca_conjunto(conjunto<T> const);
+  Conjunto<T> uniao_conjunto(conjunto<T> const);
+  Conjunto<T> intercecao(conjunto<T> const);
+
+  int retornar_tam() const {return tam_;}
+  int max_size() const {return tam_max;}
 
 private:
-int tamanho;
-//T *elementos;
+  void inserir(T);
+  T get_elemento(int i) const {return elementos_[i];}
+  
+  int tam_;
+  int tam_max;
+  T* elementos_;
+
 };
 
 template<class T>
-point<T>::point(T const& x)
-: tamanho{x}
-{}
-
-template<class T>
-point<T>::point()
-: tamanho{}
-{}
-
-template<class T>
-T point<T>::tamanh()
-
-{
-return tamanho;
+Conjunto<T>::Conjunto() {
+	tam_ = 0;
+	elementos_ = nullptr;
 }
 
 template<class T>
-void point<T>::alocar_elementos(T tam)
-{
-tamanho = tam;
-elementos = new T[tam];
-}
-
-template<class T>
-void point<T>::ler_elementos()
-{
-cout << "Informe os elementos do vetor:\n";
-for (int i = 0; i < tamanh(); ++i){
-cout << "Element " << i+1 << ": ";
-cin >> elementos[i];
-while(verifica_vetor(i)){
-cout << "Elemento repetido! Digite outro!" << endl;
-cin >> elementos[i];
-}
-}
-}
-
-template<class T>
-void point<T>::imprime_elementos()
-{
-for (int i = 0; i < tamanh(); ++i){
-cout << elementos[i] << " ";
-	}
-}
-
-template<class T>
-bool point<T>::verifica_vetor(int i)
-{
-int j = i;
-int aux = i-1;
-while(i > 0){
-if(elementos[j] == elementos[aux]){
-return true;
-}
-i--;
-aux--;
-}
-return false;
-}
-
-
-template<class T>
-void point<T>::diferenca(point A, point B)              //verificar
-{
-
-	int tamC = A.tamanh();
-	vector<T> aux;
-	int Acc;
-
-	for (int i = 0; i < A.tamanh(); ++i){
-		Acc = 0;
-		for (int j = 0; j < B.tamanh(); ++j){
-			if (A.elementos[i] == B.elementos[j]){
-					tamC--;
-					Acc = 1;
-				}
-			}
-	if (Acc == 0){
-		aux[i] += A.elementos[i];
-	}
-	}
-
-		
-	alocar_elementos(tamC);
-
-	for(int i = 0;i < tamanh();i++){
-		elementos[i] += aux[i];
-		}
+Conjunto<T>::Conjunto(int t) {
 	
+	tam_ = t;
+		
+	elementos_ = new (nothrow) T [tam_];
+	if (not(elementos_))
+		exit(EXIT_FAILURE);
 }
 
-/*
+template <class T>
+Conjunto<T>::~Conjunto() {
+  delete []  elementos_;
+  elementos_ = nullptr;
+}
+
+
+template <class T>
+void Conjunto<T>::inserir(T elemento)
+{
+  if (tam_ == tam_max)
+  {
+    cout << "erro ! .. encerrando programa .. " << endl;
+    exit (EXIT_FAILURE);
+  }
+
+  if (not(procurar_conjunto(elemento)))
+  {
+    elementos_[tam_] = elemento;
+    tam_++;
+  }
+}
+
+template <class T>
+void Conjunto<T>::ler_conjunto()
+{
+  ler_conjunto(tam_max);
+}
+
+template <class T>
+void Conjunto<T>::ler_conjunto(int n)
+{
+  T elemento; 
+
+  for (int i{0}; i < n; i++)
+  {
+    cout << "Element " << i + 1 << ": ";
+    cin >> elemento_[i];
+		if(belongs(i)) {
+			i--;		
+		}
+    }
+}
+
+template <class T>
+void Conjunto<T>::escrever_conjunto()
+{
+  cout << "{";
+  for (int i{0}; i < tam_; i++)
+  {
+    cout << elementos_[i];
+    if (i < tam_ - 1)
+      cout << ", ";
+  }
+  cout << "}" << endl;
+}
+
+template <class T>
+bool Conjunto<T>::belongs(int t) {
+	for (int i{0}; i < t; i++) {	
+		if (elementos_[i] == elementos[t]) {
+			return true;
+		}
+	}
+	return false;  
+}
 
 template<class T>
-T point<T>:: uniao(T tamA, T vetorB, T tamB, T vetorB)
+Conjunto<T> Conjunto<T>::diferenca_conjunto(Conjunto<T> const b) {
+	Conjunto<T> c{tam_};
+
+	for (int i{0}; i < tam_; i++) {
+		if (not(b.procurar_conjunto(elementos_[i])))
+			c.inserir(elementos_[i]);
+		}
+	return c;
+}
+
+template <class T>
+Conjunto<T> Conjunto<T>::uniao_conjunto(Conjunto<T> const b)
 {
-std::vector<T> v;
-int aux = 0;
-int tamU;
+  // 
+  Conjunto<T> c {tam_ + b.retornar_tam()};
 
-for (int i = 0; i < tamA; ++i){
-v+= vetorA[i];
-tamU++;
+  // insert elements of A
+  for (int i{0}; i < tam_; i++)
+     c.inserir(elementos_[i]);
+  
+  // insert elements of B
+  for (int i{0}; i < b.retornar_tam(); i++)
+     c.inserir(b.get_elemento(i));
+
+  return c;
 }
 
-for (i = 0; i < tamB; ++i){
-for (int j = 0; j < tamA; ++i){
-if (vetorB[i] == vetorA[j])
+template <class T>
+Conjunto<T> Conjunto<T>::intercecao(conjunto<T> const b)
 {
-aux = 1;
-}
-}
-if(aux == 1)
-aux = 0;
-else{
-v+= vetorB[i];
-tamU++;
-}
+  conjunto<T> c {tam_};
+
+  for (int i{0}; i < tam_; i++)
+    if (b.retornar_tam(elementos_[i]))
+      c.inserir(elementos_[i]);
+
+  return c;
 }
 
-D.alocar_elementos(tamU);
-for (int i = 0; i < tamanh(); ++i)
+
+int main (int argc, char** argv)
 {
-elementos+=v[i];
-}
+  int n1, n2;
+  
+  
+  cout << "Cardinalidade de A: ";
+  cin >> n1;
+  cout << "Cardinalidade de B: ";
+  cin >> n2;
+  
+  Conjunto<int> A{n1},B{n2};
+ 
+  cout << "Informe os elementos de A:" << endl;
+  A.ler_conjunto();
+  
+  cout << "Informe os elementos de B" << endl;
+  B.ler_conjunto();
 
-}
+  cout << "Conjunto A: " << endl;
+  A.escrever_conjunto();
 
-template<class T>
-T point<T>:: interseccao(T tamA, T vetorA, T tamB, T vetorB)
-{
-int tamD = 0;
-vector<T> aux;
-for (int i = 0; i < tamA; ++i){
-for (int j = 0; j < tamB; ++j){
-if (vetorA[i] == vetorB[j]){
-tamD++;
-aux+=vetorA[i]; }
-}
-}
-
-D.alocar_elementos(tamD);
-for (int i = 0; i < tamanh(); ++i)
-{
-elementos+= aux;
-}
-}
-
-*/
-
-int main()
-{
-//point uniao, diferenca, interseccao;
-int AA, BB;
-cout << "Tamanho de A:\n";
-cin >> AA;
-
-point <int> A(AA);
-A.alocar_elementos(AA);
-A.ler_elementos();
-cout << " A = {";
-A.imprime_elementos();
-cout << "}";
-cout << endl;
-
-
-cout << "Tamanho de B: ";
-cin >> BB;
-point<int> B {BB};
-B.alocar_elementos(BB);
-B.ler_elementos();
-cout << "B = {";
-B.imprime_elementos();
-cout << "}";
-cout << "\n";
-
-point<int> C{0};
-C.diferenca(A, B);
-cout << "C = {";
-C.imprime_elementos();
-cout << "}";
-cout <<"\n";
-
+  cout << "Conjunto B: " << endl;
+  A.escrever_conjunto();
+  
+  cout << "Diferença: " << endl;
+  A.diferenca_conjunto(B).escrever_conjunto();
+  
+  cout << "União: " << endl;
+  A.uniao_conjunto(B).escrever_conjunto();
 }
